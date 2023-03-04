@@ -1,5 +1,59 @@
 import numpy as np
-from src.const_variable import *
+
+def variables(epsilon: float):
+    """
+    return variables need
+    return:
+        ALL_ACTIONS, actions, ALL_POLICE, TERMINAL_AREA, NEGATIVE1_AREA
+    """
+    e = epsilon
+
+    # e-soft policy
+    optimal = 1 - e + e/4
+    normal = e/4
+
+    ALL_ACTIONS = ("up", "down", "right", "left")
+
+    # actions in every state
+    actions = {"up": np.array([-1, 0]),
+            "down": np.array([1, 0]),
+            "right": np.array([0, 1]),
+            "left": np.array([0, -1])}
+
+    # initialize an arbitrarily e-soft policy (4 * 4 dict array)
+    policy_down = {"up": normal,
+                    "down": optimal,
+                    "right": normal,
+                    "left": normal}
+    policy_right = {"up": normal,
+                    "down": normal,
+                    "right": optimal,
+                    "left": normal}
+    policy_up = {"up": optimal,
+                "down": normal,
+                "right": normal,
+                "left": normal}
+    policy_left = {"up": normal,
+                    "down": normal,
+                    "right": normal,
+                    "left": optimal}
+    ALL_POLICE = (policy_up, policy_down, policy_right, policy_left)
+
+    return ALL_ACTIONS, actions, ALL_POLICE
+
+def areas(map_size: int):
+    """
+    return:
+        TERMINAL_AREA, NEGATIVE1_AREA
+    """
+    if map_size == 4:
+        TERMINAL_AREA = [(1,1), (1,3), (2,3), (3,0), (3,3)]
+        NEGATIVE1_AREA = [(1,1), (1,3), (2,3), (3,0)]
+    else:
+        TERMINAL_AREA = [(1,3), (2,7), (3,4), (4,1), (5,2), (5,6), (6,5), (7,3), (8,8), (9, 0), (9,9)]
+        NEGATIVE1_AREA = [(1,3), (2,7), (3,4), (4,1), (5,2), (5,6), (6,5), (7,3), (8,8), (9, 0)]
+
+    return TERMINAL_AREA, NEGATIVE1_AREA
 
 
 def create_random_policy(all_policy: tuple, size: int) -> np.ndarray:
@@ -30,6 +84,7 @@ def random_action(current_policy: dict, e: float):
     """
     p = np.random.random()
     max_action, _ = optimal_action(current_policy=current_policy)
+    ALL_ACTIONS, _, _ = variables(epsilon=e)
 
     if p < 1 - e + e/4:
         return max_action
@@ -62,6 +117,7 @@ def generate1episode(policies: np.ndarray, size: int, e: float, map_array: np.nd
     step = 0
     current_state = np.array([0, 0])
     valid = True
+    _, actions, _ = variables(epsilon=e)
     while True:
         # follow current policy to go to next state
         current_policy = policies[current_state[0], current_state[1]]
@@ -120,6 +176,7 @@ def create1entry_policy_from_Qtable(Qtable: np.ndarray, epsilon: float, size: in
     create one entry's policy
     """
     res = {}
+    ALL_ACTIONS, _, _ = variables(epsilon=epsilon)
     # find the max action from Q table
     Q_max = -1000
     A = ""
@@ -153,6 +210,8 @@ def check_state_terminal(state: tuple, size: int) -> bool:
     """
     x = state[0]
     y = state[1]
+    TERMINAL_AREA, NEGATIVE1_AREA = areas(map_size=size)
+
     if 0 <= x < size and 0 <= y < size and state not in TERMINAL_AREA:
         return False
     else:
@@ -164,15 +223,17 @@ def check_reward_negative1(state: tuple, size: int) -> bool:
     """
     x = state[0]
     y = state[1]
+    TERMINAL_AREA, NEGATIVE1_AREA = areas(map_size=size)
     if x < 0 or x >= size or y < 0 or y >= size or state in NEGATIVE1_AREA:
         return True
     else:
         return False
     
-def createReturnsList(size: int) -> list:
+def createReturnsList(size: int, epsilon: float) -> list:
     """
     create Returns list
     """
+    ALL_ACTIONS, _, _ = variables(epsilon=epsilon)
     res = []
     for i in range(size):
         for j in range(size):
@@ -204,6 +265,7 @@ def new_entry_pi(max_action: str, epsilon: float):
     max_new_policy = 1 - epsilon + epsilon/4
     other_new_policy = epsilon / 4
     res = {}
+    ALL_ACTIONS, _, _ = variables(epsilon=epsilon)
     for action in ALL_ACTIONS:
         if action == max_action:
             res.update({action: max_new_policy})

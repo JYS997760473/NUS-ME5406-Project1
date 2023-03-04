@@ -1,12 +1,12 @@
 import numpy as np
 import copy
-from src.const_variable import *
 from src.lib import *
 
 def SARSA(size: int, threshold: float, epsilon: float, gamma: float=0.9, time: int = 1000):
     """
     SARSA to get optimal policy
     """
+    ALL_ACTIONS, actions, ALL_POLICE = variables(epsilon=epsilon)
     # initialize a Q-table
     Qtable = createQtable(size=size)
     times = 0

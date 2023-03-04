@@ -18,7 +18,8 @@ def main(opt):
     # create reward map
     map_array = map(map_size=map_size)
     if task == "Monte_Carlo":
-        policy, Qtable = monteCarlo(size=map_size, epsilon=epsilon, gamma=gamma, time=time)
+        policy, Qtable = monteCarlo(size=map_size, epsilon=epsilon, map_array=map_array,
+                                     gamma=gamma, time=time)
     elif task == "SARSA":
         Qtable, policy, gap, time = SARSA(size=map_size, threshold=threshold, epsilon=epsilon,
                                             gamma=gamma, time=time)
@@ -28,13 +29,7 @@ def main(opt):
                                               gamma=gamma, time=time)
     print(Qtable)
     print(policy)
-    print(gap)
     print(time)
-        
-
-
-
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

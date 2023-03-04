@@ -1,17 +1,17 @@
-from src.const_variable import *
 from src.lib import *
 
-def monteCarlo(size: int, epsilon: float=e, gamma: float=0.9, time: int = 1000):
+def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float=0.9, time: int = 1000):
     """
     first visit monte carlo control without exploring state
     """
+    ALL_ACTIONS, actions, ALL_POLICE = variables(epsilon=epsilon)
     # initilaize an arbitrarily epsilon policy
     policies = create_random_policy(all_policy=ALL_POLICE, size=size)
     print(f"first:{policies}")
     # initilaize a Q-table
     Qtable = createQtable(size=size)
     # returns stores G
-    returns = createReturnsList(size=size)
+    returns = createReturnsList(size=size, epsilon=epsilon)
     times = 0
     while times < time:
         # generate an valid episode with T steps folloing policy
@@ -19,7 +19,8 @@ def monteCarlo(size: int, epsilon: float=e, gamma: float=0.9, time: int = 1000):
         #     episode, steps, valid = generate1episode(policies=current_policies, size=size, e=epsilon)
         #     if valid:
         #         break
-        episode, steps, valid = generate1episode(policies=policies, size=size, e=epsilon)
+        episode, steps, valid = generate1episode(policies=policies, size=size, e=epsilon,
+                                                 map_array=map_array)
         # if episode[-1][list(episode[-1].keys())[0]][1] == 1:
             # print(f"got frisbee, time:{times}")
         G = 0
