@@ -13,6 +13,7 @@ def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float=0.
     # returns stores G
     returns = createReturnsList(size=size, epsilon=epsilon)
     times = 0
+    duration = []
     while times < time:
         # generate an valid episode with T steps folloing policy
         # while True:
@@ -25,6 +26,7 @@ def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float=0.
             # print(f"got frisbee, time:{times}")
         G = 0
         # print(f"episode:{episode}")
+        k = 0
         # backward iterate the episode
         for current_step in reversed(episode):
             # current coordinate
@@ -59,7 +61,9 @@ def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float=0.
                 # print(f"x,y:{x},{y},action:{A}")
                 # print("change")
                 # print(policies)
-                    
+            k += 1
+        duration.append(k)            
         times += 1
         # print(Qtable)
+    plot_durations(duration=duration)
     return policies, Qtable
