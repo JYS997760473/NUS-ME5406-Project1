@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import torch
 
 def variables(epsilon: float):
     """
@@ -164,7 +166,7 @@ def find_position(action: str, all_actions: tuple) -> int:
     """
     find index in the ALL_ACTION tuple
     """
-    res = -1
+    res = -10
     for index, a in enumerate(all_actions):
         if action == a:
             res = index
@@ -272,3 +274,19 @@ def new_entry_pi(max_action: str, epsilon: float):
         else:
             res.update({action: other_new_policy})
     return res
+
+def plot_durations(duration: list):
+    """
+    plot total durations
+    """
+    # if gpu is to be used
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    plt.figure(1)
+    duration_torch = torch.tensor(duration, dtype=torch.float)
+    plt.xlabel('Episode')
+    plt.ylabel('Duration')
+    plt.plot(duration_torch.numpy())
+    means = duration_torch.unfold(0, 100, 1).mean(1).view(-1)
+    means = torch.cat((torch.zeros(99), means))
+    plt.plot(means.numpy())
+    plt.show()

@@ -11,6 +11,7 @@ def SARSA(size: int, threshold: float, epsilon: float, gamma: float=0.9, time: i
     Qtable = createQtable(size=size)
     times = 0
     gap = 100.000
+    duration = []
     while times < time or gap > threshold:
         # initialize state
         current_coordinate = (0, 0)
@@ -52,8 +53,10 @@ def SARSA(size: int, threshold: float, epsilon: float, gamma: float=0.9, time: i
             # update current coordinate
             current_coordinate = (next_state[0], next_state[1])
         times += 1
+        duration.append(k+1)
         aftQtable = copy.deepcopy(Qtable)
         gap = abs((aftQtable - preQtable).sum())
     optimal_policy = get_policy_from_Qtable(Qtable=Qtable, epsilon=epsilon, size=size)
+    plot_durations(duration=duration)
     return Qtable, optimal_policy, gap, times
 
