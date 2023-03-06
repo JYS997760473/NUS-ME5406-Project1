@@ -1,4 +1,5 @@
 from src.lib import *
+from src.evaluation import *
 
 def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float=0.9, time: int = 1000):
     """
@@ -7,25 +8,22 @@ def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float=0.
     ALL_ACTIONS, actions, ALL_POLICE = variables(epsilon=epsilon)
     # initilaize an arbitrarily epsilon policy
     policies = create_random_policy(all_policy=ALL_POLICE, size=size)
-    print(f"first:{policies}")
+    # print(f"first:{policies}")
     # initilaize a Q-table
     Qtable = createQtable(size=size)
     # returns stores G
     returns = createReturnsList(size=size, epsilon=epsilon)
     times = 0
     duration = []
+    reward_numpy = np.full((time), -1)
+    num_success = 0
     while times < time:
-        # generate an valid episode with T steps folloing policy
-        # while True:
-        #     episode, steps, valid = generate1episode(policies=current_policies, size=size, e=epsilon)
-        #     if valid:
-        #         break
         episode, steps, valid = generate1episode(policies=policies, size=size, e=epsilon,
                                                  map_array=map_array)
-        # if episode[-1][list(episode[-1].keys())[0]][1] == 1:
-            # print(f"got frisbee, time:{times}")
+        if episode[-1][list(episode[-1].keys())[0]][1] == 1:
+            num_success += 1
+            reward_numpy[times] = 1
         G = 0
-        # print(f"episode:{episode}")
         k = 0
         # backward iterate the episode
         for current_step in reversed(episode):
@@ -40,15 +38,15 @@ def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float=0.
                 # if current (state, action) pair is the first one, append G to returns(state, action)
                 x = int(current_coordinate[0])
                 y = int(current_coordinate[2])
-                index = (size * len(ALL_ACTIONS)) * x + len(ALL_ACTIONS) * y + find_position(current_action, ALL_ACTIONS)
+                index = (size * len(ALL_ACTIONS)) * x + len(ALL_ACTIONS) * y + find_position(current_action,
+                                                                                              ALL_ACTIONS)
                 # append G to Return list
-                # print(f"RETURNS:{returns[index]}, index: {index}")
                 returns[index][current_coordinate+','+current_action].append(G)
                 # set Q table
-                Qtable[find_position(current_action, ALL_ACTIONS), x, y] = sum(returns[index][current_coordinate+','+current_action]) / len(returns[index][current_coordinate+','+current_action])
+                Qtable[find_position(current_action, ALL_ACTIONS), x, y] = sum(returns[index][current_coordinate+
+                                    ','+current_action]) / len(returns[index][current_coordinate+','+current_action])
                 # choose the maximum action of the same state based Q table
                 Q_max = -1000
-                # print(f"Qtable:{Qtable}")
                 A = ""
                 for i in range(4):
                     # iterate four actions
@@ -58,12 +56,7 @@ def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float=0.
                 # reset the current state's policy
                 new_current_pi = new_entry_pi(max_action=A, epsilon=epsilon)
                 policies[x, y] = new_current_pi
-                # print(f"x,y:{x},{y},action:{A}")
-                # print("change")
-                # print(policies)
             k += 1
         duration.append(k)            
         times += 1
-        # print(Qtable)
-    plot_durations(duration=duration)
-    return policies, Qtable
+    return policies, Qtable, duration, reward_numpy, num_success
