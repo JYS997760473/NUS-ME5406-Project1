@@ -1,7 +1,7 @@
 from src.lib import *
-import copy
+from src.evaluation import *
 
-def Qlearning(size: int, threshold: float, epsilon: float, gamma: float=0.9, time: int = 1000):
+def Qlearning(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
     """
     Qlearning to get optimal policy
     """
@@ -9,13 +9,13 @@ def Qlearning(size: int, threshold: float, epsilon: float, gamma: float=0.9, tim
     # initialize a Q-table
     Qtable = createQtable(size=size)
     times = 0
-    gap = 100.000
     duration = []
-    while times < time or gap > threshold:
+    reward_numpy = np.full((time), -1)
+    num_success = 0
+    while times < time:
         # initialize state
         current_coordinate = (0, 0)
         k = 0
-        preQtable = copy.deepcopy(Qtable)
         while not check_state_terminal(state=current_coordinate, size=size):
             # create current policy based current Qtable
             current_policy = get_policy_from_Qtable(Qtable=Qtable, epsilon=epsilon, size=size)
@@ -40,6 +40,8 @@ def Qlearning(size: int, threshold: float, epsilon: float, gamma: float=0.9, tim
             # check if is the 1
             elif next_state[0] == size-1 and next_state[1] == size-1:
                 reward = 1
+                reward_numpy[times] = 1
+                num_success += 1
             else:
                 reward = 0
             # choose next greedy action from next state 
@@ -56,8 +58,5 @@ def Qlearning(size: int, threshold: float, epsilon: float, gamma: float=0.9, tim
             current_coordinate = (next_state[0], next_state[1])
         times += 1
         duration.append(k+1)
-        aftQtable = copy.deepcopy(Qtable)
-        gap = abs((aftQtable - preQtable).sum())
     optimal_policy = get_policy_from_Qtable(Qtable=Qtable, epsilon=epsilon, size=size)
-    plot_durations(duration=duration)
-    return Qtable, optimal_policy, gap, times
+    return Qtable, optimal_policy, duration, reward_numpy, num_success
