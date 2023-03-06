@@ -1,7 +1,7 @@
 from src.lib import *
 from src.evaluation import *
 
-def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float=0.9, time: int = 1000):
+def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float, time: int):
     """
     first visit monte carlo control without exploring state
     """
@@ -18,6 +18,7 @@ def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float=0.
     reward_numpy = np.full((time), -1)
     num_success = 0
     while times < time:
+        print(times)
         episode, steps, valid = generate1episode(policies=policies, size=size, e=epsilon,
                                                  map_array=map_array)
         if episode[-1][list(episode[-1].keys())[0]][1] == 1:
