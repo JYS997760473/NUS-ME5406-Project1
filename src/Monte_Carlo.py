@@ -1,5 +1,6 @@
 from src.lib import *
 from src.evaluation import *
+import time as ttime
 
 def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float, time: int):
     """
@@ -8,6 +9,106 @@ def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float, t
     ALL_ACTIONS, actions, ALL_POLICE = variables(epsilon=epsilon)
     # initilaize an arbitrarily epsilon policy
     policies = create_random_policy(all_policy=ALL_POLICE, size=size)
+    policies_ = np.array([[{'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.025, 'right': 0.025, 'left': 0.925},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025}],
+ [{'up': 0.025, 'down': 0.025, 'right': 0.925, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025}],
+ [{'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.025, 'right': 0.925, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025}],
+ [{'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025}],
+ [{'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.025, 'right': 0.925, 'left': 0.025},
+  {'up': 0.025, 'down': 0.025, 'right': 0.925, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025}],
+ [{'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.025, 'right': 0.925, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.025, 'right': 0.025, 'left': 0.925},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025}],
+ [{'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025}],
+ [{'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.025, 'right': 0.925, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025}],
+ [{'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025}],
+ [{'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.025, 'right': 0.925, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.025, 'down': 0.925, 'right': 0.025, 'left': 0.025},
+  {'up': 0.925, 'down': 0.025, 'right': 0.025, 'left': 0.025}]])
     # print(f"first:{policies}")
     # initilaize a Q-table
     Qtable = createQtable(size=size)
@@ -19,15 +120,39 @@ def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float, t
     num_success = 0
     while times < time:
         print(times)
-        episode, steps, valid = generate1episode(policies=policies, size=size, e=epsilon,
+        print(f"success:{num_success}")
+        mm = 0
+        while True:
+            episode, steps, valid = generate1episode(policies=policies, size=size, e=epsilon,
                                                  map_array=map_array)
+            if steps < 200:
+                # if steps < 50:
+                break
+            # else:
+            #     mm += 1
+            #     # print(mm)
+            #     while True:
+            #         episode, steps, valid = generate1episode(policies=policies_, size=size, e=epsilon,
+            #                                      map_array=map_array)
+            #         break
+            #         # if mm % 2 == 0:
+            #         #     break
+            #         # if episode[-1][list(episode[-1].keys())[0]][1] == 1:
+            #         #     break
+            #     break
+            # if steps < 50:
+            #     break
+            # if episode[-1][list(episode[-1].keys())[0]][1] == 1:
+            #     break
         if episode[-1][list(episode[-1].keys())[0]][1] == 1:
             num_success += 1
             reward_numpy[times] = 1
         G = 0
         k = 0
+        # print(f"steps:{steps}")
         # backward iterate the episode
         for current_step in reversed(episode):
+            # start_time = ttime.time()
             # current coordinate
             current_coordinate = list(current_step.keys())[0]
             reward = current_step[current_coordinate][1]
@@ -35,6 +160,7 @@ def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float, t
             G = gamma * G + reward
             # For first visit monte carlo, check if this (state, action) pair is the first one
             if not have_SAbefore(previous_episode=episode[:steps], state=current_coordinate, action=current_action):
+                # print(f"time use:{ttime.time() - start_time}")
                 steps -= 1
                 # if current (state, action) pair is the first one, append G to returns(state, action)
                 x = int(current_coordinate[0])
@@ -58,6 +184,7 @@ def monteCarlo(size: int, epsilon: float, map_array: np.ndarray, gamma: float, t
                 new_current_pi = new_entry_pi(max_action=A, epsilon=epsilon)
                 policies[x, y] = new_current_pi
             k += 1
+        
         duration.append(k)            
         times += 1
     return policies, Qtable, duration, reward_numpy, num_success
