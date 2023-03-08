@@ -1,5 +1,6 @@
 from src.lib import *
 from src.evaluation import *
+import time as ttime
 
 def Qlearning(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
     """
@@ -8,6 +9,15 @@ def Qlearning(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
     ALL_ACTIONS, actions, ALL_POLICE = variables(epsilon=epsilon)
     # initialize a Q-table
     Qtable = createQtable(size=size)
+    # Qtable[1,0,0]=1
+    # Qtable[2,1,0]=1
+    # Qtable[1,1,1]=1
+    # Qtable[1,2,1]=1
+    # Qtable[2,3,1]=1
+    # Qtable[2,3,2]=1
+    # Qtable[2,4,2]=1
+    # Qtable[1,4,3]=1
+    # Qtable[1,5,4]=1
     times = 0
     duration = []
     reward_numpy = np.full((time), -1)
@@ -16,6 +26,9 @@ def Qlearning(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
         # initialize state
         current_coordinate = (0, 0)
         k = 0
+        # start_time = ttime.time()
+        print(times)
+        print(f"success:{num_success}")
         while not check_state_terminal(state=current_coordinate, size=size):
             # create current policy based current Qtable
             current_policy = get_policy_from_Qtable(Qtable=Qtable, epsilon=epsilon, size=size)
@@ -29,10 +42,11 @@ def Qlearning(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
             x_next = next_state[0]
             y_next = next_state[1]
             Q_current = Qtable[find_position(current_action, ALL_ACTIONS), x, y]
-            if k == 0:
-                alpha = 1
-            else:
-                alpha = 1/k
+            # if k == 0:
+            #     alpha = 1
+            # else:
+            #     alpha = 1/k
+            alpha = 0.2
             # get reward
             # check if -1
             if check_reward_negative1(state=(next_state[0], next_state[1]), size=size):
@@ -56,6 +70,7 @@ def Qlearning(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
             k += 1
             # update current coordinate
             current_coordinate = (next_state[0], next_state[1])
+        # print(f"time use:{ttime.time() - start_time}")
         times += 1
         duration.append(k+1)
     optimal_policy = get_policy_from_Qtable(Qtable=Qtable, epsilon=epsilon, size=size)

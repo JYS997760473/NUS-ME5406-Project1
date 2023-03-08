@@ -17,13 +17,14 @@ def SARSA(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
         print(times)
         # initialize state
         current_coordinate = (0, 0)
-        # create current policy based current Qtable
+        # # create current policy based current Qtable
         current_policy = get_policy_from_Qtable(Qtable=Qtable, epsilon=epsilon, size=size)
         # choose action from Q based epsilon-greedy policy
         current_action = random_action(current_policy=current_policy[int(current_coordinate[0]), 
                                                                      int(current_coordinate[1])], e=epsilon)
         k = 0
-        while not check_state_terminal(state=current_coordinate, size=size):
+        print(f"success:{num_success}")
+        while check_state_terminal(state=current_coordinate, size=size) == False:
             # create current policy based current Qtable
             current_policy = get_policy_from_Qtable(Qtable=Qtable, epsilon=epsilon, size=size)
             next_state = np.array([int(current_coordinate[0]), int(current_coordinate[1])]) + \
@@ -34,10 +35,11 @@ def SARSA(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
             y_next = next_state[1]
             Q_current = Qtable[find_position(current_action, ALL_ACTIONS), x, y]
             next_action = ""
-            if k == 0:
-                alpha = 1
-            else:
-                alpha = 1/k
+            # if k == 0:
+            #     alpha = 1
+            # else:
+            #     alpha = 1/k
+            alpha = 0.01
             # get reward
             # check if -1
             if check_reward_negative1(state=(next_state[0], next_state[1]), size=size):
@@ -62,6 +64,7 @@ def SARSA(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
             # update current coordinate
             current_coordinate = (next_state[0], next_state[1])
             current_action = next_action
+            # current_policy = get_policy_from_Qtable(Qtable=Qtable, epsilon=epsilon, size=size)
         times += 1
         duration.append(k+1)
     optimal_policy = get_policy_from_Qtable(Qtable=Qtable, epsilon=epsilon, size=size)
