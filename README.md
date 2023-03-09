@@ -58,12 +58,12 @@ It will generate three evalution figures:
 
 Average step:
 
-<img src="/Users/jiayansong/Desktop/nus/ME5406/NUS-ME5406-Project1/figures/step.png" alt="isolated" width="400"/>
+<img src="./figures/step.png" alt="isolated" width="400"/>
 
 Number bar:
 
-<img src="/Users/jiayansong/Desktop/nus/ME5406/NUS-ME5406-Project1/figures/bar.png" alt="isolated" width="400"/>
+<img src="./figures/bar.png" alt="isolated" width="400"/>
 
 Average reward:
 
-<img src="/Users/jiayansong/Desktop/nus/ME5406/NUS-ME5406-Project1/figures/reward.png" alt="isolated" width="400"/>
+<img src="./figures/reward.png" alt="isolated" width="400"/>
