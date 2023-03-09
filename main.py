@@ -30,7 +30,8 @@ def main(opt):
         
 
     # target root
-    target_root_directory = "/Users/jiayansong/Desktop/nus/ME5406/figures"
+    # target_root_directory = "/Users/jiayansong/Desktop/nus/ME5406/figures"
+    target_root_directory = ""
     target_directory = os.path.join(target_root_directory, task)
 
     # plot steps of episodes figure
@@ -48,15 +49,15 @@ def main(opt):
     reward_path = os.path.join(target_directory, reward_name)
     plot_reward(reward_numpy=reward_numpy, file_path=reward_path)
 
-    # record log file
-    log_name = "map"+str(map_size)+'_e'+str(epsilon)+'_gamma'+str(gamma)+'_t'+str(time)+'_log.txt'
-    log_path = os.path.join(target_directory, log_name)
-    file = open(log_path, 'w+')
-    file.write("Q table\n\n")
-    file.write(str(Qtable)+'\n\n')
-    file.write("optimal policy\n\n")
-    file.write(str(policy))
-    file.close()
+    # # record log file
+    # log_name = "map"+str(map_size)+'_e'+str(epsilon)+'_gamma'+str(gamma)+'_t'+str(time)+'_log.txt'
+    # log_path = os.path.join(target_directory, log_name)
+    # file = open(log_path, 'w+')
+    # file.write("Q table\n\n")
+    # file.write(str(Qtable)+'\n\n')
+    # file.write("optimal policy\n\n")
+    # file.write(str(policy))
+    # file.close()
     
 
 if __name__ == "__main__":

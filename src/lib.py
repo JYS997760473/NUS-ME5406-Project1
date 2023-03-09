@@ -54,7 +54,6 @@ def areas(map_size: int):
                           (6,1),(6,3),(6,5),(7,3),(7,6),(7,7),(8,2),(8,4),(8,6),(8,8),(9,4),(9,9)]
         NEGATIVE1_AREA = [(0,2),(0,5),(1,3),(1,6),(1,9),(2,0),(2,4),(2,7),(3,0),(3,4),(4,1),(4,5),(5,2),(5,6),
                           (6,1),(6,3),(6,5),(7,3),(7,6),(7,7),(8,2),(8,4),(8,6),(8,8),(9,4)]
-
     return TERMINAL_AREA, NEGATIVE1_AREA
 
 
@@ -160,6 +159,9 @@ def createQtable(size: int):
     second: x, y
     """
     table = np.zeros((4, size, size))
+    if size == 10:
+        table[1,0,0]=1
+        table[2,0,0]=1
     return table
 
 def find_position(action: str, all_actions: tuple) -> int:
@@ -274,3 +276,9 @@ def new_entry_pi(max_action: str, epsilon: float):
         else:
             res.update({action: other_new_policy})
     return res
+succ = [{'0,0': ['right', 0]}, {'0,1': ['down', 0]}, {'1,1': ['down', 0]}, 
+ {'2,1': ['right', 0]}, {'2,2': ['down', 0]}, {'3,2': ['down', 0]}, 
+ {'4,2': ['right', 0]}, {'4,3': ['down', 0]}, {'5,3': ['right', 0]}, 
+ {'5,4': ['down', 0]}, {'6,4': ['down', 0]}, {'7,4': ['right', 0]}, 
+ {'7,5': ['down', 0]}, {'8,5': ['down', 0]}, {'9,5': ['right', 0]}, 
+ {'9,6': ['right', 0]}, {'9,7': ['right', 0]}, {'9,8': ['right', 1]}]
