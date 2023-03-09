@@ -1,6 +1,5 @@
 from src.lib import *
 from src.evaluation import *
-import time as ttime
 
 def Qlearning(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
     """
