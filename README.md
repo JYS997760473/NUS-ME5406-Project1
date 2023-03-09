@@ -11,6 +11,7 @@ Before run this project, please make sure that you have installed these packages
 - torch (only used to help plot figures of results)
 - numpy
 - matplotlib
+- os
 
 ### Run the code
 
