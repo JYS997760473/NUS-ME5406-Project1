@@ -33,10 +33,10 @@ python main.py --task SARSA --map_size 4 --epsilon 0.1 --gamma 0.9 --time 10000
 python main.py --task Monte_Carlo --map_size 4 --epsilon 0.1 --gamma 0.9 --time 10000
 ```
 
-#### For Q-learning with $4\times 4$ map, epsilon is 0.1, gamma is 0.9 and number of episodes is 10000:
+#### For Q-learning with $4\times 4$ map, epsilon is 0.1, gamma is 0.9 and number of episodes is 50000:
 
 ```bash
-python main.py --task Q-learning --map_size 4 --epsilon 0.1 --gamma 0.9 --time 10000
+python main.py --task Q-learning --map_size 4 --epsilon 0.1 --gamma 0.9 --time 50000
 ```
 
 The options for `task` are `Monte_Carlo`, `SARSA` and `Q-learning`, for `map_size` is `4` and `10`. 
