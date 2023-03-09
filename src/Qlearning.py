@@ -9,15 +9,6 @@ def Qlearning(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
     ALL_ACTIONS, actions, ALL_POLICE = variables(epsilon=epsilon)
     # initialize a Q-table
     Qtable = createQtable(size=size)
-    # Qtable[1,0,0]=1
-    # Qtable[2,1,0]=1
-    # Qtable[1,1,1]=1
-    # Qtable[1,2,1]=1
-    # Qtable[2,3,1]=1
-    # Qtable[2,3,2]=1
-    # Qtable[2,4,2]=1
-    # Qtable[1,4,3]=1
-    # Qtable[1,5,4]=1
     times = 0
     duration = []
     reward_numpy = np.full((time), -1)
@@ -70,7 +61,7 @@ def Qlearning(size: int, epsilon: float, gamma: float=0.9, time: int = 1000):
             k += 1
             # update current coordinate
             current_coordinate = (next_state[0], next_state[1])
-        # print(f"time use:{ttime.time() - start_time}")
+        print(current_coordinate)
         times += 1
         duration.append(k+1)
     optimal_policy = get_policy_from_Qtable(Qtable=Qtable, epsilon=epsilon, size=size)
